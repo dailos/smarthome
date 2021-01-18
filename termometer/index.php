@@ -9,7 +9,7 @@ class Mijia{
 
     public function __construct()
     {
-        if(isset($$_GET['mac']) && preg_match(self::MAC_REGEX, $_GET['mac'])){
+        if(isset($_GET['mac']) && preg_match(self::MAC_REGEX, $_GET['mac'])){
             $this->mac = $_GET['mac'];
             $this->filepath = self::FILE_PATH . $this->mac . ".data";
         }
@@ -26,13 +26,13 @@ class Mijia{
 
     private function getResponse()
     {
-        $fileContent = file_get_contents($this->filepath);
-        $values = explode(" ", $fileContent);
-        return [
+        $content = $string = str_replace(PHP_EOL, '', file_get_contents($this->filepath));
+        $values = explode(" ", $content);
+        return json_encode([
             "temperature" => $values[0],
             "humidity" => $values[1],
             "battery" => $values[2],
-        ];
+        ]);
     }
 }
 
