@@ -26,16 +26,9 @@ class eq3{
     {
         if($this->command){
             shell_exec(self::SCRIPT ." ". $this->mac ." ". $this->command);
-            $this->response('OK');
         }
-        $this->response(json_decode(file_get_contents($this->filepath), true));
-    }
-
-    private function response($response)
-    {
         header('Content-Type: application/json');
-        echo $response;
-        die;
+        echo file_get_contents($this->filepath);
     }
 
     private function getCommand()
