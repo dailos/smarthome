@@ -1,11 +1,11 @@
 <?php
 
 class eq3{
-    const SCRIPT = "../bin/eq3.exp";
+    const SCRIPT = "./bin/eq3.exp";
     const MAC_REGEX = "/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/";
     const BOOST_MAPPING = ["ON" => "boost", "OFF" => "boost off"];
     const LOCK_MAPPING = ["ON" => "lock", "OFF" => "unlock"];
-    const FILE_PATH = "../data/termostat_";
+    const FILE_PATH = "./data/termostat_";
 
     private $mac;
     private $params;
