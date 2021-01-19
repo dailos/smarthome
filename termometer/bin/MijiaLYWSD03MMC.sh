@@ -1,5 +1,6 @@
 #!/bin/bash
 MAC=$1
+sleep $2
 
 bt=$(timeout 10 gatttool -b $MAC --char-write-req --handle='0x0038' --value="0100" --listen | grep "Notification handle" -m 1)
 file="../data/termometer_$MAC.data"
