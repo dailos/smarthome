@@ -6,7 +6,7 @@ file="../data/termometer_$MAC.data"
 
 if [ -z "$bt" ]
 then
-	echo '{"Error":"Reading failed"}'
+	echo "Error, Reading failed for $MAC"
 else
 	hexa=$(echo $bt | awk '{print $6 " " $7 " " $8 " " $9 " " $10}')
 	temphexa=$(echo $bt | awk '{print $7$6}' | tr '[:lower:]' '[:upper:]')
