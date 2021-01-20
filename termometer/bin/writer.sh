@@ -2,7 +2,7 @@
 MAC=$1
 
 bt=$(timeout 15 gatttool -b $MAC --char-write-req --handle='0x0038' --value="0100" --listen | grep "Notification handle" -m 1)
-file="../data/termometer_$MAC.data"
+file="./termometer/data/$MAC.data"
 
 if [ -z "$bt" ]
 then
