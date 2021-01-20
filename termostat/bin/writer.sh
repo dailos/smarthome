@@ -6,7 +6,7 @@ file="./termostat/data/termostat_$MAC.json"
 
 if [ -z "$status" ]
 then
-	echo '{"Error":"Reading failed"}'
+	echo "Error, Reading failed for $MAC"
 else
 	echo $status > $file
 	echo 'OK';
