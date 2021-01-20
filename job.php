@@ -28,10 +28,10 @@ class job{
         foreach (self::DEVICES as $device){
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
-                    shell_exec(self::TERMOSTAT_SCRIPT . " ". $device['mac']);
+                    exec(self::TERMOSTAT_SCRIPT . " ". $device['mac']);
                     break;
                 case self::TYPE_TERMOMETER:
-                    shell_exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
+                    exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
                     break;
             }
             $this->notify($device);
@@ -41,7 +41,7 @@ class job{
 
     private function resetHci()
     {
-        shell_exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
+        exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
     }
 
     private function notify($device)
