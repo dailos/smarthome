@@ -28,10 +28,10 @@ class job{
         foreach (self::DEVICES as $device){
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
-                    shell_exec(self::TERMOSTAT_SCRIPT);
+                    shell_exec(self::TERMOSTAT_SCRIPT . " ". $device['mac']);
                     break;
                 case self::TYPE_TERMOMETER:
-                    shell_exec(self::TERMOMETER_SCRIPT);
+                    shell_exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
                     break;
             }
         }
