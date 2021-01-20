@@ -34,6 +34,7 @@ class job{
                     shell_exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
                     break;
             }
+            $this->notify($device);
         }
         $this->resetHci();
     }
@@ -41,6 +42,11 @@ class job{
     private function resetHci()
     {
         shell_exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
+    }
+
+    private function notify($device)
+    {
+        echo $device['type'] . " " . $device[$mac] . "done";
     }
 }
 
