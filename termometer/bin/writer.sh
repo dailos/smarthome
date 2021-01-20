@@ -24,6 +24,6 @@ else
 	# Add missing leading zero if needed (sed): "-.05" -> "-0.05" and ".05" -> "0.05"
 	temperature=$(echo "scale=2; $temperature100 / 100" | bc | sed 's:^\(-\?\)\.\(.*\)$:\10.\2:')
 	battery=$(echo "scale=3; $battery1000 / 1000" | bc)
-	echo '{"temperature": "$temperature", "humidity": "$humidity", "battery": "$battery"}' > $file
+	echo '{"temperature": "{$temperature}", "humidity": "{$humidity}", "battery": "{$battery}"}' > $file
 	echo 'OK';
 fi
