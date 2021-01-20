@@ -1,8 +1,7 @@
 #!/bin/bash
 MAC=$1
-sleep $2
 
-bt=$(timeout 25 gatttool -b $MAC --char-write-req --handle='0x0038' --value="0100" --listen | grep "Notification handle" -m 1)
+bt=$(timeout 15 gatttool -b $MAC --char-write-req --handle='0x0038' --value="0100" --listen | grep "Notification handle" -m 1)
 file="../data/termometer_$MAC.data"
 
 if [ -z "$bt" ]
@@ -25,5 +24,5 @@ else
 	# Add missing leading zero if needed (sed): "-.05" -> "-0.05" and ".05" -> "0.05"
 	temperature=$(echo "scale=2; $temperature100 / 100" | bc | sed 's:^\(-\?\)\.\(.*\)$:\10.\2:')
 	battery=$(echo "scale=3; $battery1000 / 1000" | bc)
-	echo $temperature $humidity $battery $(date -u) > $file
+	echo '{"temperature": "$temperature", "humidity": "$humidity", "battery": "$battery"}' > $file
 fi
