@@ -46,7 +46,7 @@ class job{
 
     private function notify($device)
     {
-        echo $device['type'] . " " . $device[$mac] . "done";
+        echo $device['type'] . " " . $device['mac'] . "done";
     }
 }
 
