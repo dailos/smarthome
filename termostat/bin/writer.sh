@@ -2,7 +2,7 @@
 MAC=$1
 
 status=$(./termostat/bin/eq3.exp $MAC devjson)
-file=".termostat/data/termostat_$MAC.json"
+file="./termostat/data/termostat_$MAC.json"
 
 if [ -z "$status" ]
 then
