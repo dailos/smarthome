@@ -4,7 +4,7 @@ class job{
     const TYPE_TERMOSTAT = 'termostat';
     const TYPE_TERMOMETER = 'termometer';
     const TERMOSTAT_SCRIPT='./termostat/bin/writer.sh';
-    const TERMOMETER_SCRIPT='./termostat/bin/writer.sh';
+    const TERMOMETER_SCRIPT='./termometer/bin/writer.sh';
     const DEVICES = [
         [
             'mac' => '00:1A:22:12:DF:0E',
