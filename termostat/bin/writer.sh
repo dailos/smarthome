@@ -9,4 +9,5 @@ then
 	echo '{"Error":"Reading failed"}'
 else
 	echo $status > $file
+	echo 'OK';
 fi
