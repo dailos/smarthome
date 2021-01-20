@@ -17,7 +17,7 @@ class job{
             'label' => 'Erik'
         ],
         [
-            'mac' => 'A4:C1:38:44:E9:EB',
+            'mac' => 'A4:C1:38:C7:07:6F',
             'type' => self::TYPE_TERMOMETER,
             'location' => 'livingroom'
         ],
