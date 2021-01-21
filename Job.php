@@ -6,6 +6,7 @@ class Job{
     const TYPE_TERMOMETER = 'termometer';
     const TERMOSTAT_SCRIPT='./Scripts/termostatWriter.sh';
     const TERMOMETER_SCRIPT='./Scripts/termometerWriter.sh';
+    const REFRESH_HCI0_AT= ['10', '30', '50'];
     const DEVICES = [
         [
             'mac' => '00:1A:22:12:DF:0E',
@@ -31,6 +32,10 @@ class Job{
 
     public function __invoke()
     {
+        if (in_array(date('i'),self::REFRESH_HCI0_AT)) {
+            exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
+            sleep(2);
+        }
         foreach (self::DEVICES as $device){
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
@@ -40,8 +45,6 @@ class Job{
                     exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
                     break;
             }
-            exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
-            sleep(2);
         }
     }
 }
