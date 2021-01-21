@@ -55,7 +55,7 @@ class Job{
     private function getTermometerValues($mac)
     {
         exec("timeout 10 gatttool -b $mac --char-write-req --handle='0x0038' --value=\"0100\" --listen | grep \"Notification handle\" -m 1", $response);
-        if(strpos($response[0], '0x0036') !== false) {
+        if(isset($response[0]) && strpos($response[0], '0x0036') !== false) {
             $result = explode(' ', $response[0]);
             return json_encode([
                 'temperature' => hexdec($result[6] . $result[5]) / 100,
