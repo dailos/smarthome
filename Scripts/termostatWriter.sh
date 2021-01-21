@@ -1,8 +1,8 @@
 #!/bin/bash
 MAC=$1
 
-status=$(./termostat/bin/eq3.exp $MAC devjson)
-file="./termostat/data/$MAC.json"
+status=$(./Scripts/eq3.exp $MAC devjson)
+file="./Data/$MAC.json"
 
 if [ -z "$status" ]
 then

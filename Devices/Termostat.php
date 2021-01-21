@@ -1,25 +1,22 @@
 <?php
 
-class eq3{
-    const SCRIPT = "./bin/eq3.exp";
-    const MAC_REGEX = "/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/";
+namespace Smarthome\Devices;
+
+class Termostat
+{
+    const SCRIPT = "./Scripts/eq3.exp";
     const BOOST_MAPPING = ["ON" => "boost", "OFF" => "boost off"];
     const LOCK_MAPPING = ["ON" => "lock", "OFF" => "unlock"];
-    const FILE_PATH = "./data/";
 
     private $mac;
     private $params;
     private $command;
-    private $filepath;
 
-    public function __construct()
+    public function __construct($params)
     {
-        $this->params = $_GET;
-        if(isset($this->params['mac']) && preg_match(self::MAC_REGEX, $this->params['mac'])){
-            $this->mac = $this->params['mac'];
-            $this->filepath = self::FILE_PATH . $this->mac . ".json";
-            $this->command = $this->getCommand();
-        }
+        $this->params = $params;
+        $this->mac = $this->params['mac'];
+        $this->command = $this->getCommand();
     }
 
     public function handle()
@@ -27,8 +24,6 @@ class eq3{
         if($this->command){
             shell_exec(self::SCRIPT ." ". $this->mac ." ". $this->command);
         }
-        header('Content-Type: application/json');
-        echo file_get_contents($this->filepath);
     }
 
     private function getCommand()
@@ -47,8 +42,3 @@ class eq3{
         }
     }
 }
-
-$request = new eq3();
-$request->handle();
-
-

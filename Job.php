@@ -1,10 +1,11 @@
 <?php
+namespace Smarthome;
 
-class job{
+class Job{
     const TYPE_TERMOSTAT = 'termostat';
     const TYPE_TERMOMETER = 'termometer';
-    const TERMOSTAT_SCRIPT='./termostat/bin/writer.sh';
-    const TERMOMETER_SCRIPT='./termometer/bin/writer.sh';
+    const TERMOSTAT_SCRIPT='./Scripts/termostatWriter.sh';
+    const TERMOMETER_SCRIPT='./Scripts/termometerWriter.sh';
     const DEVICES = [
         [
             'mac' => '00:1A:22:12:DF:0E',
@@ -39,16 +40,11 @@ class job{
                     exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
                     break;
             }
-            $this->resetHci();
+            exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
             sleep(2);
         }
     }
-
-    private function resetHci()
-    {
-        exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
-    }
 }
 
-$job = new job;
+$job = new Job;
 $job();
