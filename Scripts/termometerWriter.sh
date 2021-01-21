@@ -4,10 +4,8 @@ MAC=$1
 bt=$(timeout 10 gatttool -b $MAC --char-write-req --handle='0x0038' --value="0100" --listen | grep "Notification handle" -m 1)
 file="./Data/$MAC.json"
 
-if [ -z "$bt" ]
+if [ "$bt" ]
 then
-	echo "Error, Reading failed for $MAC"
-else
 	hexa=$(echo $bt | awk '{print $6 " " $7 " " $8 " " $9 " " $10}')
 	temphexa=$(echo $bt | awk '{print $7$6}' | tr '[:lower:]' '[:upper:]')
 	humhexa=$(echo $bt | awk '{print $8}' | tr '[:lower:]' '[:upper:]')
