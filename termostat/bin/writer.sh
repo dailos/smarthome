@@ -9,5 +9,4 @@ then
 	echo "Error, Reading failed for $MAC"
 else
 	echo $status > $file
-	echo 'OK';
 fi
