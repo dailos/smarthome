@@ -7,36 +7,18 @@ class Job{
     const TERMOSTAT_SCRIPT='./Bin/eq3.exp';
     const FILE_PATH = './Data/';
     const REFRESH_HCI0_AT= ['10', '30', '50'];
-    const DEVICES = [
-        [
-            'mac' => '00:1A:22:12:DF:0E',
-            'type' => self::TYPE_TERMOSTAT,
-            'label' => 'Erik',
-        ],
-        [
-            'mac' => 'A4:C1:38:44:E9:EB',
-            'type' => self::TYPE_TERMOMETER,
-            'label' => 'Erik'
-        ],
-        [
-            'mac' => 'A4:C1:38:C7:07:6F',
-            'type' => self::TYPE_TERMOMETER,
-            'location' => 'livingroom'
-        ],
-        [
-            'mac' => 'A4:C1:38:BC:6B:C8',
-            'type' => self::TYPE_TERMOMETER,
-            'location' => 'office'
-        ],
-    ];
+
+    private $devices;
+
+    public function __construct()
+    {
+        $this->devices = json_decode(file_get_contents('devices.json'));
+    }
 
     public function __invoke()
     {
-        if (in_array(date('i'),self::REFRESH_HCI0_AT)) {
-            exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
-            sleep(2);
-        }
-        foreach (self::DEVICES as $device){
+        $this->refreshHICIfNeeded();
+        foreach ($this->devices as $device){
             $status = null;
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
@@ -62,6 +44,13 @@ class Job{
                 'humidity' => hexdec($result[7]),
                 'battery' => hexdec($result[9] . $result[8]) / 1000
             ]);
+        }
+    }
+
+    private function refreshHICIfNeeded(){
+        if (in_array(date('i'),self::REFRESH_HCI0_AT)) {
+            exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
+            sleep(2);
         }
     }
 }
