@@ -40,7 +40,8 @@ class Job{
         foreach (self::DEVICES as $device){
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
-                    $status = exec(self::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson");
+
+                    exec(self::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson", $status);
                     if($status){
                         file_put_contents(self::FILE_PATH . $device['mac'] .'.json', $status);
                     }
