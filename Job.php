@@ -4,7 +4,7 @@ namespace Smarthome;
 class Job{
     const TYPE_TERMOSTAT = 'termostat';
     const TYPE_TERMOMETER = 'termometer';
-    const TERMOSTAT_SCRIPT='./Scripts/eq3.exp';
+    const TERMOSTAT_SCRIPT='./Bin/eq3.exp';
     const FILE_PATH = './Data/';
     const REFRESH_HCI0_AT= ['10', '30', '50'];
     const DEVICES = [
