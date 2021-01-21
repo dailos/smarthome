@@ -21,6 +21,11 @@ class job{
             'type' => self::TYPE_TERMOMETER,
             'location' => 'livingroom'
         ],
+        [
+            'mac' => 'A4:C1:38:BC:6B:C8',
+            'type' => self::TYPE_TERMOMETER,
+            'location' => 'office'
+        ],
     ];
 
     public function __invoke()
