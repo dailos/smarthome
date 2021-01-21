@@ -4,8 +4,9 @@ namespace Smarthome;
 class Job{
     const TYPE_TERMOSTAT = 'termostat';
     const TYPE_TERMOMETER = 'termometer';
-    const TERMOSTAT_SCRIPT='./Scripts/termostatWriter.sh';
+    const TERMOSTAT_SCRIPT='./Scripts/eq3.exp';
     const TERMOMETER_SCRIPT='./Scripts/termometerWriter.sh';
+    const FILE_PATH = './Data/';
     const REFRESH_HCI0_AT= ['10', '30', '50'];
     const DEVICES = [
         [
@@ -39,7 +40,10 @@ class Job{
         foreach (self::DEVICES as $device){
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
-                    exec(self::TERMOSTAT_SCRIPT . " ". $device['mac']);
+                    $status = exec(self::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson");
+                    if($status){
+                        file_put_contents(self::FILE_PATH . $device['mac'] .'.json', $status);
+                    }
                     break;
                 case self::TYPE_TERMOMETER:
                     exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
