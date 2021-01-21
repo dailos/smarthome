@@ -35,6 +35,7 @@ class job{
                     break;
             }
             $this->resetHci();
+            sleep(2);
         }
     }
 
