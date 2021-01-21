@@ -58,9 +58,9 @@ class Job{
         if(strpos($response[0], '0x0036') !== false) {
             $result = explode(' ', $response[0]);
             return json_encode([
-                'temperature' => hexdec($result[7] . $result[6]) / 100,
-                'humidity' => hexdec($result[8]),
-                'battery' => hexdec($result[10] . $result[9]) / 1000
+                'temperature' => hexdec($result[6] . $result[5]) / 100,
+                'humidity' => hexdec($result[7]),
+                'battery' => hexdec($result[9] . $result[8]) / 1000
             ]);
         }
     }
