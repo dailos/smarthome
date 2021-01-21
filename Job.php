@@ -12,7 +12,7 @@ class Job{
 
     public function __construct()
     {
-        $this->devices = json_decode(file_get_contents('devices.json'));
+        $this->devices = json_decode(file_get_contents('devices.json'), true);
     }
 
     public function __invoke()
