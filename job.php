@@ -35,18 +35,12 @@ class job{
                     break;
             }
             $this->resetHci();
-            $this->notify($device);
         }
     }
 
     private function resetHci()
     {
         exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
-    }
-
-    private function notify($device)
-    {
-        echo $device['type'] . " " . $device['mac'] . " done\n";
     }
 }
 
