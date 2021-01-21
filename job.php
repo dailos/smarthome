@@ -34,9 +34,9 @@ class job{
                     exec(self::TERMOMETER_SCRIPT . " ". $device['mac']);
                     break;
             }
+            $this->resetHci();
             $this->notify($device);
         }
-        $this->resetHci();
     }
 
     private function resetHci()
