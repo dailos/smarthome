@@ -1,7 +1,8 @@
 build:
 	docker build -t smarthome .
 	docker run -v $(shell pwd):/app smarthome composer install
-
+up:
+	docker run -it -v $(shell pwd):/app smarthome sh
 test:
 	docker run -v $(shell pwd):/app smarthome vendor/bin/phpunit  --testdox --colors=always
 

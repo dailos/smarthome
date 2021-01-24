@@ -1,11 +1,10 @@
 <?php
 namespace Smarthome;
 
+use Smarthome\Devices\Termostat;
+use Smarthome\Devices\Types;
+
 class Job{
-    const TYPE_TERMOSTAT = 'termostat';
-    const TYPE_TERMOMETER = 'termometer';
-    const TERMOSTAT_SCRIPT='./Bin/eq3.exp';
-    const FILE_PATH = './Data/';
     const REFRESH_HCI0_AT= ['10', '30', '50'];
     const BROKER = "volumio";
 
@@ -22,16 +21,15 @@ class Job{
         foreach ($this->devices as $device){
             $status = null;
             switch ($device['type']) {
-                case self::TYPE_TERMOSTAT:
-                    exec(self::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson", $status);
+                case Types::TERMOSTAT:
+                    exec(Termostat::SCRIPT . " ". $device['mac'] . " devjson", $status);
                     $status=implode(' ', $status);
                     break;
-                case self::TYPE_TERMOMETER:
+                case Types::TERMOMETER:
                     $status = $this->getTermometerValues($device['mac']);
                     break;
             }
             if($status){
-                file_put_contents(self::FILE_PATH . $device['mac'] .'.json', $status);
                 $topic = $this->getTopic($device);
                 shell_exec("mosquitto_pub -h ".self::BROKER." -t $topic -m '" . $status ."'");
             }
