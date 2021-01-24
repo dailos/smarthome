@@ -24,7 +24,7 @@ class Job{
             switch ($device['type']) {
                 case self::TYPE_TERMOSTAT:
                     exec(self::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson", $status);
-                    $status=$status[0];
+                    $status=implode(' ', $status);
                     break;
                 case self::TYPE_TERMOMETER:
                     $status = $this->getTermometerValues($device['mac']);
