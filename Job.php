@@ -50,7 +50,7 @@ class Job{
             return json_encode([
                 'temperature' => hexdec($result[6] . $result[5]) / 100,
                 'humidity' => hexdec($result[7]),
-                'battery' => 100 * ((hexdec($result[9] . $result[8]) / 1000) - 2.1 )
+                'battery' => round (100 * ((hexdec($result[9] . $result[8]) / 1000) - 2.1 ))
             ]);
         }
     }
