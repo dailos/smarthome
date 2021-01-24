@@ -7,6 +7,7 @@ class Job{
     const TERMOSTAT_SCRIPT='./Bin/eq3.exp';
     const FILE_PATH = './Data/';
     const REFRESH_HCI0_AT= ['10', '30', '50'];
+    const BROKER = "volumio";
 
     private $devices;
 
@@ -30,8 +31,15 @@ class Job{
             }
             if($status){
                 file_put_contents(self::FILE_PATH . $device['mac'] .'.json', $status);
+                $topic = $this->getTopic($device);
+                shell_exec("mosquitto_pub -h ".self::BROKER." -t $topic -m $status");
             }
         }
+    }
+
+    private function getTopic($device)
+    {
+        return $device['location'] ."/".$device['type']."/status/";
     }
 
     private function getTermometerValues($mac)
