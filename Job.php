@@ -32,7 +32,7 @@ class Job{
             if($status){
                 file_put_contents(self::FILE_PATH . $device['mac'] .'.json', $status);
                 $topic = $this->getTopic($device);
-                shell_exec("mosquitto_pub -h ".self::BROKER." -t $topic -m " . json_encode($status));
+                shell_exec("mosquitto_pub -h ".self::BROKER." -t $topic -m '" . json_encode($status) ."'");
             }
         }
     }
