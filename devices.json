@@ -2,12 +2,12 @@
   {
     "mac": "00:1A:22:12:DF:0E",
     "type": "termostat",
-    "label": "Erik"
+    "location": "erik"
   },
   {
     "mac": "A4:C1:38:44:E9:EB",
     "type": "termometer",
-    "label": "Erik"
+    "location": "erik"
   },
   {"mac": "A4:C1:38:C7:07:6F",
   "type": "termometer",
