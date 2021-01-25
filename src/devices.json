@@ -2,20 +2,24 @@
   {
     "mac": "00:1A:22:12:DF:0E",
     "type": "termostat",
-    "location": "erik"
+    "location": "erik",
+    "topic": "erik/termostat/"
   },
   {
     "mac": "A4:C1:38:44:E9:EB",
     "type": "termometer",
-    "location": "erik"
+    "location": "erik",
+    "topic": "erik/termometer/"
   },
   {"mac": "A4:C1:38:C7:07:6F",
   "type": "termometer",
-  "location": "livingroom"
+  "location": "livingroom", 
+   "topic": "livingroom/termometer/"
   },
   {
     "mac": "A4:C1:38:BC:6B:C8",
     "type": "termometer",
-    "location": "office"
+    "location": "office",
+    "topic": "office/termometer/"
   }
 ]

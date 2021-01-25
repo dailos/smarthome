@@ -1,33 +1,33 @@
 <?php
 
-
 namespace Smarthome;
 
+require __DIR__.'/../vendor/autoload.php';
 
-use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\MQTTClient;
 
 class Consumer
 {
-
-    const SERVER= 'volumio';
-    const CLIENT= 'raspi';
-    const PORT = 1883;
-    const TOPIC = 'erik/termostat/set/';
     private $mqtt;
 
     public function __construct()
     {
-        $this->mqtt = new MqttClient(self::SERVER, self::PORT, self::CLIENT);
+        $this->mqtt =  new MQTTClient(Config::BROKER);
+        $this->mqtt->connect();
     }
 
     public function __invoke()
     {
-        $this->mqtt->connect();
-        $this->mqtt->subscribe(self::TOPIC, function ($topic, $message) {
-            echo sprintf("Received message on topic [%s]: %s\n", $topic, $message);
-        }, 0);
+        foreach (Config::getDevices() as $device){
+            if($device['type'] === Config::TYPE_TERMOSTAT){
+                $this->mqtt->subscribe($device['topic']."set/",function ($topic, $command) use ($device)  {
+                    shell_exec(Config::TERMOSTAT_SCRIPT ." ". $device['mac'] ." ". $command);
+                }, 0);
+            }
+        }
+
         $this->mqtt->loop(true);
-        $this->mqtt->disconnect();
+        $this->mqtt->close();
     }
 }
 

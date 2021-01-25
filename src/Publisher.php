@@ -4,47 +4,36 @@ namespace Smarthome;
 require __DIR__.'/../vendor/autoload.php';
 
 use PhpMqtt\Client\MQTTClient;
-use Smarthome\Devices\Termostat;
-use Smarthome\Devices\Types;
 
 class Publisher{
-    const REFRESH_HCI0_AT= ['10', '30', '50'];
-    const BROKER = "volumio";
 
-    private $devices;
     private $mqtt;
 
     public function __construct()
     {
-        $this->devices = json_decode(file_get_contents('devices.json'), true);
-        $this->mqtt =  new MQTTClient(self::BROKER);
-        $this->mqtt->connect(null, null, null, true);
+        $this->mqtt =  new MQTTClient(Config::BROKER);
+        $this->mqtt->connect();
     }
 
     public function __invoke()
     {
         $this->refreshHICIfNeeded();
-        foreach ($this->devices as $device){
+        foreach (Config::getDevices() as $device){
             $status = null;
             switch ($device['type']) {
                 case Types::TERMOSTAT:
-                    exec(Termostat::SCRIPT . " ". $device['mac'] . " devjson", $status);
+                    exec(Config::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson", $status);
                     $status = implode(' ', $status);
                     break;
-                case Types::TERMOMETER:
+                case Config::TYPE_TERMOMETER:
                     $status = $this->getTermometerValues($device['mac']);
                     break;
             }
             if($status){
-                $this->mqtt->publish($this->getTopic($device), $status);
+                $this->mqtt->publish($device['topic']."status/", $status);
             }
         }
         $this->mqtt->close();
-    }
-
-    private function getTopic($device)
-    {
-        return $device['location'] ."/".$device['type']."/status/";
     }
 
     private function getTermometerValues($mac)
@@ -62,7 +51,7 @@ class Publisher{
     }
 
     private function refreshHICIfNeeded(){
-        if (in_array(date('i'),self::REFRESH_HCI0_AT)) {
+        if (in_array(date('i'),Config::REFRESH_HCI0_AT)) {
             exec('sudo hciconfig hci0 down && sudo hciconfig hci0 up');
             sleep(2);
         }
