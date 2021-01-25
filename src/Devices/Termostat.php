@@ -4,7 +4,7 @@ namespace Smarthome\Devices;
 
 class Termostat
 {
-    const SCRIPT = "./Bin/eq3.exp";
+    const SCRIPT = "./bin/eq3.exp";
     const BOOST_MAPPING = ["ON" => "boost", "OFF" => "boost off"];
     const LOCK_MAPPING = ["ON" => "lock", "OFF" => "unlock"];
 
