@@ -3,7 +3,7 @@ namespace Smarthome;
 
 require __DIR__.'/../vendor/autoload.php';
 
-use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\MQTTClient;
 use Smarthome\Devices\Termostat;
 use Smarthome\Devices\Types;
 
@@ -17,7 +17,7 @@ class Publisher{
     public function __construct()
     {
         $this->devices = json_decode(file_get_contents('devices.json'), true);
-        $this->mqtt =  new MqttClient(self::BROKER);
+        $this->mqtt =  new MQTTClient(self::BROKER);
         $this->mqtt->connect();
     }
 
