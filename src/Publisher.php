@@ -21,7 +21,7 @@ class Publisher{
         foreach (Config::getDevices() as $device){
             $status = null;
             switch ($device['type']) {
-                case Types::TERMOSTAT:
+                case Config::TERMOSTAT:
                     exec(Config::TERMOSTAT_SCRIPT . " ". $device['mac'] . " devjson", $status);
                     $status = implode(' ', $status);
                     break;
