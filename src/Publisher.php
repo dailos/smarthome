@@ -18,7 +18,7 @@ class Publisher{
     {
         $this->devices = json_decode(file_get_contents('devices.json'), true);
         $this->mqtt =  new MQTTClient(self::BROKER);
-        $this->mqtt->connect();
+        $this->mqtt->connect(null, null, null, true);
     }
 
     public function __invoke()
@@ -29,7 +29,7 @@ class Publisher{
             switch ($device['type']) {
                 case Types::TERMOSTAT:
                     exec(Termostat::SCRIPT . " ". $device['mac'] . " devjson", $status);
-                    $status=implode(' ', $status);
+                    $status = implode(' ', $status);
                     break;
                 case Types::TERMOMETER:
                     $status = $this->getTermometerValues($device['mac']);
