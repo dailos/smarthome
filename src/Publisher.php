@@ -1,6 +1,8 @@
 <?php
 namespace Smarthome;
 
+require __DIR__.'/../vendor/autoload.php';
+
 use Smarthome\Devices\Termostat;
 use Smarthome\Devices\Types;
 
