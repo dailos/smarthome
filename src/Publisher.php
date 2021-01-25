@@ -30,7 +30,7 @@ class Publisher{
                     break;
             }
             if($status){
-                $this->mqtt->publish($device['topic']."status", $status);
+                $this->mqtt->publish($device['location'] .'/'. $device['type'] .'/' ."status", $status);
             }
         }
         $this->mqtt->close();
