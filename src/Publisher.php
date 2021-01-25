@@ -3,6 +3,7 @@ namespace Smarthome;
 
 require __DIR__.'/../vendor/autoload.php';
 
+use PhpMqtt\Client\MqttClient;
 use Smarthome\Devices\Termostat;
 use Smarthome\Devices\Types;
 
@@ -11,10 +12,13 @@ class Publisher{
     const BROKER = "volumio";
 
     private $devices;
+    private $mqtt;
 
     public function __construct()
     {
         $this->devices = json_decode(file_get_contents('devices.json'), true);
+        $this->mqtt =  new MqttClient(self::BROKER);
+        $this->mqtt->connect();
     }
 
     public function __invoke()
@@ -32,10 +36,10 @@ class Publisher{
                     break;
             }
             if($status){
-                $topic = $this->getTopic($device);
-                shell_exec("mosquitto_pub -h ".self::BROKER." -t $topic -m '" . $status ."'");
+                $this->mqtt->publish($this->getTopic($device), $status);
             }
         }
+        $this->mqtt->close();
     }
 
     private function getTopic($device)
