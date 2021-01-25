@@ -12,7 +12,7 @@
     ],
     "homepage": "https://github.com/dailos78/smarthome",
     "require": {
-        "php": ">=7.4",
+        "php": "^7.2",
         "php-mqtt/client": "^0.3.0"
     },
     "require-dev": {

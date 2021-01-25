@@ -4,7 +4,7 @@ namespace Smarthome;
 use Smarthome\Devices\Termostat;
 use Smarthome\Devices\Types;
 
-class Job{
+class Publisher{
     const REFRESH_HCI0_AT= ['10', '30', '50'];
     const BROKER = "volumio";
 
@@ -52,6 +52,7 @@ class Job{
                 'battery' => round (100 * ((hexdec($result[9] . $result[8]) / 1000) - 2.1 ))
             ]);
         }
+        return null;
     }
 
     private function refreshHICIfNeeded(){
@@ -62,5 +63,5 @@ class Job{
     }
 }
 
-$job = new Job;
-$job();
+$publisher = new Publisher();
+$publisher();
