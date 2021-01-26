@@ -21,7 +21,7 @@ class Consumer
         foreach (Config::getDevices() as $device){
             if($device['type'] === Config::TYPE_TERMOSTAT){
                 $this->mqtt->subscribe($device['location'] .'/'. $device['type'] .'/'. 'set',function ($topic, $command) use ($device)  {
-                    echo Config::TERMOSTAT_SCRIPT ." ". $device['mac'] ." ". $command;
+                    echo Config::TERMOSTAT_SCRIPT ." ". $device['mac'] ." ". $command ."\n";
                     shell_exec(Config::TERMOSTAT_SCRIPT ." ". $device['mac'] ." ". $command);
                 }, 0);
             }
