@@ -1,0 +1,19 @@
+{
+  "mac" : "00:1A:22:12:DF:0E",
+  "temperature" : 5.0,
+  "valve" : 0,
+  "mode" : {
+    "auto" : "ON",
+    "manual" : "OFF",
+    "low battery" : "OFF",
+    "open window" : "OFF",
+    "vacation" : "OFF",
+    "locked" : "OFF",
+    "boost" : "OFF",
+    "unknown" : "OFF",
+    "dst" : "OFF",
+    "on" : "OFF",
+    "off" : "OFF"
+  },
+  "vacation" : null
+}
