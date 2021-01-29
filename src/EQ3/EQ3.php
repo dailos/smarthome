@@ -6,7 +6,7 @@ use PhpMqtt\Client\MQTTClient;
 class EQ3
 {
     const BROKER = "volumio.local";
-    const SCRIPT = __DIR__ . "./script.exp 00:1A:22:12:DF:0E ";    
+    const SCRIPT = __DIR__ . "/script.exp 00:1A:22:12:DF:0E ";    
 
     private $mqtt;    
 
