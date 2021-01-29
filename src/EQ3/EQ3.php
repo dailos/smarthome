@@ -28,7 +28,7 @@ class EQ3
 
     public function publish()
     {
-        shell_exec(self::SCRIPT . "devjson", $status);
+        exec(self::SCRIPT . "devjson", $status);
         $status = implode(' ', $status);
         echo $status;
         $this->mqtt->publish("erik/termostat/status", $status);
