@@ -19,7 +19,7 @@ class EQ3
     public function subscribe()
     {
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {
-            echo $command;
+            echo $command . "\n";
             shell_exec(self::SCRIPT . $command);
         }, 0);
         $this->mqtt->loop(true);
@@ -30,7 +30,7 @@ class EQ3
     {
         exec(self::SCRIPT . "devjson", $status);
         $status = implode(' ', $status);
-        echo $status;
+        echo $status ."\n";
         $this->mqtt->publish("erik/termostat/status", $status);
         $this->mqtt->close();
     }
