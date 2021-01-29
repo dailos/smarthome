@@ -10,18 +10,18 @@ from bluetooth_utils import (toggle_device, enable_le_scan,
 
 broker = "volumio.local"
 port = 1883
-mapping = {"A4:C1:38:44:E9:EB": "erik", 
+mapping = {
+        "A4:C1:38:44:E9:EB": "erik", 
         "A4:C1:38:C7:07:6F": "livingroom", 
         "A4:C1:38:BC:6B:C8": "office"
         }
-dev_id = 0 
 
-toggle_device(dev_id, True)
+toggle_device(0, True)
  
 try:
-    sock = bluez.hci_open_dev(dev_id)
+    sock = bluez.hci_open_dev(0)
 except:
-    print("Cannot open bluetooth device %i" % dev_id)
+    print("Cannot open bluetooth device ")
     raise
  
 # Set filter to "True" to see only one packet per device
@@ -43,7 +43,7 @@ try:
             batt = int(data_str[28:30], 16)
             msg = '{"temperature": ' + str(temp) + ',"humidity":' + str(hum) + ',"battery": ' + str(batt) +'}'            
             topic = mapping[mac] + "/termometer/status"
-            ret = client.publish(topic, msg)
+            client.publish(topic, msg)
     # Called on new LE packet
     parse_le_advertising_events(sock,
                                 handler=le_advertise_packet_handler,
