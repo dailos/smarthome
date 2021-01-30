@@ -21,16 +21,20 @@ class Core
 
     public function __invoke()
     {
-        while (true)
-        {            
-            $this->mqtt->loop(true, true, 5); 
-            if(count($this->queue)){ 
-                $this->execAction(array_shift($this->queue));             
-            }else{
-                $this->addToQueue('termostat_status');
-                $this->addToQueue('termometer_status');  
-            }           
-        }
+        $pid = pcntl_fork();
+        if($pid) {
+            while (true)
+            {                        
+                if(count($this->queue)){ 
+                    $this->execAction(array_shift($this->queue));             
+                }else{
+                    $this->addToQueue('termostat_status');
+                    $this->addToQueue('termometer_status');  
+                }           
+            }
+        }else {
+            $this->mqtt->loop(true); 
+        }        
     }
 
     private function addToQueue($type, $command = null, $highPrio = false)
