@@ -32,12 +32,13 @@ class Device
     }
 
     public function publish()
-    {      
-        set_time_limit(20);  
+    {              
         exec(self::SCRIPT . "devjson", $status);
         $status = implode(' ', $status);       
         $this->mqtt->publish("erik/termostat/status", $status);
         $this->mqtt->close();
         shell_exec(self::TERMOMETER_PUBLISHER);
+        sleep(30);
+        die();
     }
 }
