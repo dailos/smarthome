@@ -43,6 +43,7 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
         msg = '{"temperature": ' + \
             str(temp) + ',"humidity":' + str(hum) + \
             ',"battery": ' + str(batt) + '}'
+        print(msg)
         topic = mapping[mac] + "/termometer/status"
         client.publish(topic, msg)
 
@@ -50,6 +51,6 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
 try:
     parse_le_advertising_events(sock,
                                 handler=le_advertise_packet_handler,
-                                debug=True)
+                                debug=False)
 except KeyboardInterrupt:
     disable_le_scan(sock)
