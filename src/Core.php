@@ -71,12 +71,14 @@ class Core
 
     private function readCommands()
     {
-        $commands = file_get_contents(self::COMMAND_FILE); 
-        if($commands){     
+        if(file_exists(self::COMMAND_FILE)){
+            $commands = file_get_contents(self::COMMAND_FILE);         
             unlink(self::COMMAND_FILE);
             foreach( explode(',', $commands) as $command){
-                $this->addToQueue('termostat_command', $command, true);    
-            }        
+                if(!empty($command)){
+                    $this->addToQueue('termostat_command', $command, true);    
+                }
+            }                        
         }
     }
 
