@@ -42,7 +42,7 @@ class App
 }
 
 
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 
 define("PUBLISH", "publish");
