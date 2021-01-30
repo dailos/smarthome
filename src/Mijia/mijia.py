@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from datetime import datetime
+from datetime import time
 import bluetooth._bluetooth as bluez
 import paho.mqtt.client as paho
 
@@ -32,13 +32,14 @@ except:
     raise
 
 enable_le_scan(sock, filter_duplicates=True)
-counter = 0
+
+expireAt = int(time()) + 10
 
 
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
     counter = counter + 1
-    if(counter == 10):
+    if(int(time()) > expireAt):
         disable_le_scan(sock)
     
     if mapping.has_key(mac):
