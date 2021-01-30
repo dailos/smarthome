@@ -9,7 +9,7 @@ class Core
     const BROKER = "volumio.local";
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
     const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";
-    const COMMAND_FILE = "./command.txt";
+    const COMMAND_FILE = __DIR__ . "/commands.txt";
 
     private $mqtt;    
     private $queue = [];
