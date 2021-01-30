@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
-from datetime import time
+import time
+import calendar
 import bluetooth._bluetooth as bluez
 import paho.mqtt.client as paho
 
@@ -33,14 +34,14 @@ except:
 
 enable_le_scan(sock, filter_duplicates=True)
 
-expireAt = int(time()) + 10
+expireAt = calendar.timegm(time.gmtime()) + 30
 
 
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
-    counter = counter + 1
-    if(int(time()) > expireAt):
-        disable_le_scan(sock)
+    
+    if(calendar.timegm(time.gmtime()) > expireAt):
+        sys.exit()
     
     if mapping.has_key(mac):
         temp = float(int(data_str[22:26], 16)) / 10.0
@@ -49,7 +50,6 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
         msg = '{"temperature": ' + \
             str(temp) + ',"humidity":' + str(hum) + \
             ',"battery": ' + str(batt) + '}'
-        print(msg)
         topic = mapping[mac] + "/termometer/status"
         client.publish(topic, msg)
 
