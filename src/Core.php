@@ -25,7 +25,8 @@ class Core
         $pid = pcntl_fork();
         if($pid) {
             while (true)
-            {                    
+            {          
+                print_r($this->queue);          
                 $this->readCommands();                
                 if(count($this->queue)){ 
                     $this->execAction(array_shift($this->queue));             
@@ -46,13 +47,11 @@ class Core
             array_unshift($this->queue, $action);
         }else{
             $this->queue[] = $action;
-        }
-        print_r($this->queue);
+        }        
     }
 
     private function execAction($action)
-    {               
-        print_r($action);
+    {                      
         switch ($action['type']) 
         {
             case 'termostat_command':
@@ -74,10 +73,8 @@ class Core
         if(file_exists(self::COMMAND_FILE)){
             $commands = file_get_contents(self::COMMAND_FILE);         
             unlink(self::COMMAND_FILE);
-            foreach( explode(',', $commands) as $command){
-                if(!empty($command)){
-                    $this->addToQueue('termostat_command', $command, true);    
-                }
+            foreach( explode(',', $commands) as $command){               
+                $this->addToQueue('termostat_command', $command, true);                    
             }                        
         }
     }
