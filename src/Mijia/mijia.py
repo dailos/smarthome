@@ -38,9 +38,9 @@ counter = 0
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
     counter = counter + 1
-    if(counter == 10){
+    if(counter == 10):
         disable_le_scan(sock)
-    }
+    
     if mapping.has_key(mac):
         temp = float(int(data_str[22:26], 16)) / 10.0
         hum = int(data_str[26:28], 16)
