@@ -16,8 +16,7 @@ class Core
     public function __construct()
     {
         $this->connect();
-        $this->subscribe();             
-        echo "starting \n";                
+        $this->subscribe();                                 
     }        
 
     public function __invoke()
@@ -47,7 +46,7 @@ class Core
     private function execAction($action)
     {
         print_r($action);
-        print_r($this-queue);
+        print_r($this->queue);
         switch ($action['type']) 
         {
             case 'termostat_command':
@@ -79,6 +78,6 @@ class Core
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
             $this->addToQueue('termostat_command', $command, true);                     
         }, 0);
-        $this->mqtt->loop(true);   
+        //$this->mqtt->loop(true);   
     }
 }
