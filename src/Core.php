@@ -79,6 +79,7 @@ class Core
     private function subscribe()
     {
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
+            echo "Set\n";
             $this->addToQueue('termostat_command', $command, true);                     
         }, 0);          
     }
