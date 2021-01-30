@@ -22,8 +22,8 @@ class Core
     public function __invoke()
     {
         while (true)
-        {
-            echo count($this->queue) . "\n";
+        {            
+            $this->mqtt->loop(true, true); 
             if(count($this->queue)){ 
                 $this->execAction(array_shift($this->queue));             
             }else{
@@ -44,9 +44,7 @@ class Core
     }
 
     private function execAction($action)
-    {
-        print_r($action);
-        print_r($this->queue);
+    {               
         switch ($action['type']) 
         {
             case 'termostat_command':
@@ -77,7 +75,6 @@ class Core
     {
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
             $this->addToQueue('termostat_command', $command, true);                     
-        }, 0);
-        //$this->mqtt->loop(true);   
+        }, 0);          
     }
 }
