@@ -9,6 +9,7 @@ class Core
     const BROKER = "volumio.local";
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
     const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";
+    const COMMAND_FILE = "command.txt";
 
     private $mqtt;    
     private $queue = [];
@@ -24,7 +25,8 @@ class Core
         $pid = pcntl_fork();
         if($pid) {
             while (true)
-            {                        
+            {                    
+                $this->readCommands();                
                 if(count($this->queue)){ 
                     $this->execAction(array_shift($this->queue));             
                 }else{
@@ -67,6 +69,15 @@ class Core
         }
     }
 
+    private function readCommands()
+    {
+        $commands = file_get_contents(self::COMMAND_FILE);       
+        unlink(self::COMMAND_FILE);
+        foreach($explode(',', $commands) as $command){
+            $this->addToQueue('termostat_command', $command, true);    
+        }        
+    }
+
     private function connect()
     {
         $this->mqtt =  new MQTTClient(self::BROKER);
@@ -80,8 +91,7 @@ class Core
     private function subscribe()
     {
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
-            echo "Set\n";
-            $this->addToQueue('termostat_command', $command, true);                     
+            file_put_contents(self::COMMAND_FILE, $command . ",", FILE_APPEND);                                         
         }, 0);          
     }
 }
