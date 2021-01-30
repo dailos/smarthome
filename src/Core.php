@@ -53,6 +53,8 @@ class Core
 
     private function execAction($action)
     {
+        print_r($action);
+        print_r($this-queue);
         switch ($action['type']) 
         {
             case 'termostat_command':
@@ -68,6 +70,4 @@ class Core
                 break;
         }
     }
-
-
 }
