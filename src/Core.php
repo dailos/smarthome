@@ -45,7 +45,7 @@ class Core
         }else{
             $this->queue[] = $action;
         }
-        print_r($this->qeueu);
+        print_r($this->queue);
     }
 
     private function execAction($action)
