@@ -56,7 +56,7 @@ class Core
         switch ($action['type']) 
         {
             case 'termostat_command':
-                shell_exec(self::TERMOSTAT_SCRIPT . $command);
+                shell_exec(self::TERMOSTAT_SCRIPT . $action['command']);
                 break;
             case 'termostat_status':
                 exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
