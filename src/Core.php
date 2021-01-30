@@ -24,21 +24,10 @@ class Core
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
             $this->addToQueue('termostat_command', $command, true);                     
         }, 0);
-        $this->mqtt->loop(true); 
-        $this->eventLoop();           
-    }    
+        $this->mqtt->loop(true);                
+    }        
 
-    private function addToQueue($type, $command = null, $highPrio = false)
-    {
-        $action = ['type' => $type, 'command' => $command];
-        if($highPrio){
-            array_unshift($this->queue, $action);
-        }else{
-            $this->queue[] = $action;
-        }
-    }
-
-    private function eventLoop()
+    public function __invoke()
     {
         while (true)
         {
@@ -48,6 +37,16 @@ class Core
                 $this->addToQueue('termostat_status');
                 $this->addToQueue('termometer_status');  
             }           
+        }
+    }
+
+    private function addToQueue($type, $command = null, $highPrio = false)
+    {
+        $action = ['type' => $type, 'command' => $command];
+        if($highPrio){
+            array_unshift($this->queue, $action);
+        }else{
+            $this->queue[] = $action;
         }
     }
 
