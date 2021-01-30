@@ -17,15 +17,14 @@ class Device
         try{
             $this->mqtt->connect();
         }catch(ConnectingToBrokerFailedException $e){            
-            die("connection to self::BROKER failed\n");
+            die("connection to " .self::BROKER ." failed\n");
         }
         
     }
 
     public function subscribe()
     {
-        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {
-            echo $command . "\n";
+        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {           
             shell_exec(self::SCRIPT . $command);
         }, 0);
         $this->mqtt->loop(true);     
@@ -34,8 +33,7 @@ class Device
     public function publish()
     {
         exec(self::SCRIPT . "devjson", $status);
-        $status = implode(' ', $status);
-        echo $status ."\n";
+        $status = implode(' ', $status);       
         $this->mqtt->publish("erik/termostat/status", $status);
         $this->mqtt->close();
     }
