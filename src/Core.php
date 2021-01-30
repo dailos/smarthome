@@ -9,7 +9,7 @@ class Core
     const BROKER = "volumio.local";
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
     const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";
-    const COMMAND_FILE = "command.txt";
+    const COMMAND_FILE = "./command.txt";
 
     private $mqtt;    
     private $queue = [];
@@ -73,7 +73,7 @@ class Core
     {
         $commands = file_get_contents(self::COMMAND_FILE);       
         unlink(self::COMMAND_FILE);
-        foreach($explode(',', $commands) as $command){
+        foreach( explode(',', $commands) as $command){
             $this->addToQueue('termostat_command', $command, true);    
         }        
     }
