@@ -41,6 +41,7 @@ class Core
     {
         $action = ['type' => $type, 'command' => $command];
         if($highPrio){
+            echo $command . "\n";
             array_unshift($this->queue, $action);
         }else{
             $this->queue[] = $action;
