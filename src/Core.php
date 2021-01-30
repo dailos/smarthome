@@ -23,7 +23,7 @@ class Core
     {
         while (true)
         {            
-            $this->mqtt->loop(true, true); 
+            $this->mqtt->loop(true, true, 5); 
             if(count($this->queue)){ 
                 $this->execAction(array_shift($this->queue));             
             }else{
@@ -45,6 +45,7 @@ class Core
 
     private function execAction($action)
     {               
+        print_r($action);
         switch ($action['type']) 
         {
             case 'termostat_command':
