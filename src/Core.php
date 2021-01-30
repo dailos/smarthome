@@ -15,16 +15,9 @@ class Core
 
     public function __construct()
     {
-        $this->mqtt =  new MQTTClient(self::BROKER);
-        try{
-            $this->mqtt->connect();
-        }catch(ConnectingToBrokerFailedException $e){            
-            die("connection to " . self::BROKER ." failed\n");
-        }       
-        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
-            $this->addToQueue('termostat_command', $command, true);                     
-        }, 0);
-        $this->mqtt->loop(true);                
+        $this->connect();
+        $this->subscribe();             
+        echo "starting \n";                
     }        
 
     public function __invoke()
@@ -69,5 +62,23 @@ class Core
                 shell_exec(self::TERMOMETER_SCRIPT);
                 break;
         }
+    }
+
+    private function connect()
+    {
+        $this->mqtt =  new MQTTClient(self::BROKER);
+        try{
+            $this->mqtt->connect();
+        }catch(ConnectingToBrokerFailedException $e){            
+            die("connection to " . self::BROKER ." failed\n");
+        }       
+    }
+
+    private function subscribe()
+    {
+        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
+            $this->addToQueue('termostat_command', $command, true);                     
+        }, 0);
+        $this->mqtt->loop(true);   
     }
 }
