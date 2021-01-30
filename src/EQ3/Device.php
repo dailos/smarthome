@@ -17,7 +17,7 @@ class Device
         try{
             $this->mqtt->connect();
         }catch(ConnectingToBrokerFailedException $e){            
-            die("connection to broker failed\n");
+            die("connection to self::BROKER failed\n");
         }
         
     }
