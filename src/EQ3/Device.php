@@ -2,6 +2,7 @@
 namespace Smarthome\EQ3;
 
 use PhpMqtt\Client\MQTTClient;
+use PhpMqtt\Client\Exceptions\ConnectingToBrokerFailedException;
 
 class Device
 {
@@ -15,7 +16,7 @@ class Device
         $this->mqtt =  new MQTTClient(self::BROKER);
         try{
             $this->mqtt->connect();
-        }catch(Exception $e){
+        }catch(ConnectingToBrokerFailedException $e){
             echo "connection to broker failed";
         }
         
@@ -27,8 +28,7 @@ class Device
             echo $command . "\n";
             shell_exec(self::SCRIPT . $command);
         }, 0);
-        $this->mqtt->loop(true);
-        $this->mqtt->close();
+        $this->mqtt->loop(true);     
     }
 
     public function publish()
