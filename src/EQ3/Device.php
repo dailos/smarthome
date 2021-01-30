@@ -8,6 +8,7 @@ class Device
 {
     const BROKER = "volumio.local";
     const SCRIPT = __DIR__ . "/script.exp 00:1A:22:12:DF:0E ";    
+    const TERMOMETER_PUBLISHER = "sudo python ". __DIR__ . "/../Mijia/mijia.py";
 
     private $mqtt;    
 
@@ -31,10 +32,11 @@ class Device
     }
 
     public function publish()
-    {
+    {        
         exec(self::SCRIPT . "devjson", $status);
         $status = implode(' ', $status);       
         $this->mqtt->publish("erik/termostat/status", $status);
         $this->mqtt->close();
+        shell_exec(self::TERMOMETER_PUBLISHER);
     }
 }
