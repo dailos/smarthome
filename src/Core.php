@@ -40,13 +40,12 @@ class Core
     private function addToQueue($type, $command = null, $highPrio = false)
     {
         $action = ['type' => $type, 'command' => $command];
-        if($highPrio){
-            echo $command . "\n";
-            //array_unshift($this->queue, $action);
-            $this->queue[] = $action;
+        if($highPrio){            
+            array_unshift($this->queue, $action);
         }else{
             $this->queue[] = $action;
         }
+        print_r($this->qeueu);
     }
 
     private function execAction($action)
