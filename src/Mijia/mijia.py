@@ -46,6 +46,8 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
         print(msg)
         topic = mapping[mac] + "/termometer/status"
         client.publish(topic, msg)
+        toggle_device(0, False)
+        toggle_device(0, True)
 
 
 try:
