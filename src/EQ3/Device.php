@@ -13,7 +13,12 @@ class Device
     public function __construct()
     {
         $this->mqtt =  new MQTTClient(self::BROKER);
-        $this->mqtt->connect();
+        try{
+            $this->mqtt->connect();
+        }catch(Exception $e){
+            echo "connection to broker failed";
+        }
+        
     }
 
     public function subscribe()
