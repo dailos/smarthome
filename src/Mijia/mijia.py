@@ -34,15 +34,16 @@ except:
 
 enable_le_scan(sock, filter_duplicates=True)
 
-expireAt = calendar.timegm(time.gmtime()) + 30
+expireAt = calendar.timegm(time.gmtime()) + 40
 
 
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
-    
+
     if(calendar.timegm(time.gmtime()) > expireAt):
+        disable_le_scan(sock)
         sys.exit()
-    
+
     if mapping.has_key(mac):
         temp = float(int(data_str[22:26], 16)) / 10.0
         hum = int(data_str[26:28], 16)
