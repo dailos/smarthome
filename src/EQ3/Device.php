@@ -37,8 +37,6 @@ class Device
         $status = implode(' ', $status);       
         $this->mqtt->publish("erik/termostat/status", $status);
         $this->mqtt->close();
-        shell_exec(self::TERMOMETER_PUBLISHER);
-        sleep(30);
-        die();
+        shell_exec(self::TERMOMETER_PUBLISHER);        
     }
 }
