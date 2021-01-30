@@ -31,6 +31,7 @@ class Core
     {
         while (true)
         {
+            echo count($this->queue) . "\n";
             if(count($this->queue)){ 
                 $this->execAction(array_shift($this->queue));             
             }else{
