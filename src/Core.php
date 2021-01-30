@@ -60,6 +60,7 @@ class Core
             case 'termostat_status':
                 exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
                 $status = implode(' ', $status);       
+                echo $status . "\n";
                 $this->mqtt->publish("erik/termostat/status", $status);
                 break;
             case 'termometer_status':
