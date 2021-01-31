@@ -1,29 +1,31 @@
 <?php
 namespace Smarthome;
 
-
 class Core
 {  
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
+    const TERMOSTAT_REFRESH = 300;
     const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";  
+    
 
     private $mqtt;    
     private $actionQueue = [];
+    private $lastTermostatRefresh = 0;
 
     public function __construct(Client $client)
     {
-        $this->mqtt = $client->getMqtt();
+        $this->mqtt = $client->getMqtt();       
     }
    
     public function __invoke()
     {
         while (true)
-        {                              
+        {                        
+            $this->forceTermostatStatusIfNeeded();  
             $this->readCommands();                
             if(count($this->actionQueue)){ 
                 $this->execAction(array_shift($this->actionQueue));             
-            }else{
-                $this->addToQueue('termostat_status');
+            }else{                
                 $this->addToQueue('termometer_status');  
             }           
         }
@@ -58,13 +60,22 @@ class Core
     }
 
     private function readCommands()
-    {
+    {        
         if(file_exists(Client::COMMAND_FILE)){
             $commands = file_get_contents(self::COMMAND_FILE);         
             unlink(self::COMMAND_FILE);
             foreach( explode(',', $commands) as $command){               
                 $this->addToQueue('termostat_command', $command, true);                    
-            }                        
+            }              
+            $this->addToQueue('termostat_status');    
         }
     }    
+
+    private function forceTermostatStatusIfNeeded()
+    {
+        if($this->lastTermostatRefresh + self::TERMOSTAT_REFRESH < time() && !file_exists(Client::COMMAND_FILE)){
+            $this->lastTermostatRefresh = time();
+            fopen(Client::COMMAND_FILE, "w");
+        }    
+    }
 }

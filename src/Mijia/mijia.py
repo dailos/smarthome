@@ -2,6 +2,7 @@
 import sys
 import time
 import calendar
+import os.path
 import bluetooth._bluetooth as bluez
 import paho.mqtt.client as paho
 
@@ -9,6 +10,7 @@ from bluetooth_utils import (toggle_device, enable_le_scan,
                              parse_le_advertising_events,
                              disable_le_scan, raw_packet_to_str)
 
+commandFile = "/home/pi/smarthome/src/commands.txt"
 broker = "volumio.local"
 port = 1883
 mapping = {
@@ -34,13 +36,11 @@ except:
 
 enable_le_scan(sock, filter_duplicates=True)
 
-expireAt = calendar.timegm(time.gmtime()) + 40
-
 
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
 
-    if(calendar.timegm(time.gmtime()) > expireAt):
+    if os.path.isfile(commandFile):
         disable_le_scan(sock)
         sys.exit()
 
