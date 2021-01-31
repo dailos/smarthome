@@ -60,7 +60,7 @@ class Core
 
     private function readCommands()
     {
-        if(file_exists(Mosquitto::COMMAND_FILE)){
+        if(file_exists(Client::COMMAND_FILE)){
             $commands = file_get_contents(self::COMMAND_FILE);         
             unlink(self::COMMAND_FILE);
             foreach( explode(',', $commands) as $command){               
