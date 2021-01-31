@@ -3,12 +3,12 @@ namespace Smarthome;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$mosquitto = new Mosquitto();
+$client = new Client();
 
 if($argv[1] == 'subscribe'){
-    $mosquitto->subcribe();
+    $client->subcribe();
 }else{
-    $core = new Core($mosquitto);
+    $core = new Core($client);
     $core();
 }
 

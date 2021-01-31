@@ -4,19 +4,19 @@ namespace Smarthome;
 use PhpMqtt\Client\MQTTClient;
 use PhpMqtt\Client\Exceptions\ConnectingToBrokerFailedException;
 
-class Mosquitto
+class Client
 {
-    const BROKER = "volumio.local";
+    const SERVER = "volumio.local";
     const COMMAND_FILE = __DIR__ . "/commands.txt";
     private $mqtt;
 
     public function __construct()
     {
-        $this->mqtt =  new MQTTClient(self::BROKER);
+        $this->mqtt =  new MQTTClient(self::SERVER);
         try{
             $this->mqtt->connect();
         }catch(ConnectingToBrokerFailedException $e){            
-            die("connection to " . self::BROKER ." failed\n");
+            die("connection to " . self::SERVER ." failed\n");
         }                                            
     }        
 
@@ -33,5 +33,4 @@ class Mosquitto
     {
         return $this->mqtt;
     }
-
 }
