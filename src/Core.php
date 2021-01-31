@@ -1,7 +1,7 @@
 <?php
 namespace Smarthome;
 
-use Mosquitto;
+use Mosquitto as MqttBroker;
 
 class Core
 {  
@@ -11,7 +11,7 @@ class Core
     private $mqtt;    
     private $actionQueue = [];
 
-    public function __construct(Mosquitto $mosquitto)
+    public function __construct(MqttBroker $mosquitto)
     {
         $this->mqtt = $mosquitto->getMqtt();
     }
