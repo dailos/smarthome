@@ -1,52 +1,42 @@
 <?php
 namespace Smarthome;
 
-use PhpMqtt\Client\MQTTClient;
-use PhpMqtt\Client\Exceptions\ConnectingToBrokerFailedException;
+use Mosquitto;
 
 class Core
-{
-    const BROKER = "volumio.local";
+{  
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
-    const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";
-    const COMMAND_FILE = __DIR__ . "/commands.txt";
+    const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";  
 
     private $mqtt;    
-    private $queue = [];
+    private $actionQueue = [];
 
-    public function __construct()
+    public function __construct(Mosquitto $mosquitto)
     {
-        $this->connect();
-        $this->subscribe();                                 
-    }        
-
+        $this->mqtt = $mosquitto->getMqtt();
+    }
+   
     public function __invoke()
     {
-        $pid = pcntl_fork();
-        if($pid) {
-            while (true)
-            {          
-                print_r($this->queue);          
-                $this->readCommands();                
-                if(count($this->queue)){ 
-                    $this->execAction(array_shift($this->queue));             
-                }else{
-                    $this->addToQueue('termostat_status');
-                    $this->addToQueue('termometer_status');  
-                }           
-            }
-        }else {
-            $this->mqtt->loop(true); 
-        }        
+        while (true)
+        {                              
+            $this->readCommands();                
+            if(count($this->actionQueue)){ 
+                $this->execAction(array_shift($this->actionQueue));             
+            }else{
+                $this->addToQueue('termostat_status');
+                $this->addToQueue('termometer_status');  
+            }           
+        }
     }
 
     private function addToQueue($type, $command = null, $highPrio = false)
     {
         $action = ['type' => $type, 'command' => $command];
         if($highPrio){            
-            array_unshift($this->queue, $action);
+            array_unshift($this->actionQueue, $action);
         }else{
-            $this->queue[] = $action;
+            $this->actionQueue[] = $action;
         }        
     }
 
@@ -71,29 +61,12 @@ class Core
 
     private function readCommands()
     {
-        if(file_exists(self::COMMAND_FILE)){
+        if(file_exists(Mosquitto::COMMAND_FILE)){
             $commands = file_get_contents(self::COMMAND_FILE);         
             unlink(self::COMMAND_FILE);
             foreach( explode(',', $commands) as $command){               
                 $this->addToQueue('termostat_command', $command, true);                    
             }                        
         }
-    }
-
-    private function connect()
-    {
-        $this->mqtt =  new MQTTClient(self::BROKER);
-        try{
-            $this->mqtt->connect();
-        }catch(ConnectingToBrokerFailedException $e){            
-            die("connection to " . self::BROKER ." failed\n");
-        }       
-    }
-
-    private function subscribe()
-    {
-        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
-            file_put_contents(self::COMMAND_FILE, $command . ",", FILE_APPEND);                                         
-        }, 0);          
-    }
+    }    
 }
