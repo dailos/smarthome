@@ -62,7 +62,7 @@ class Core
     private function readCommands()
     {        
         if(file_exists(Client::COMMAND_FILE)){
-            $commands = file_get_contents(self::COMMAND_FILE);         
+            $commands = file_get_contents(Client::COMMAND_FILE);         
             unlink(self::COMMAND_FILE);
             foreach( explode(',', $commands) as $command){               
                 $this->addToQueue('termostat_command', $command, true);                    
