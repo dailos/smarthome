@@ -64,9 +64,11 @@ class Core
         if(file_exists(Client::COMMAND_FILE)){
             $commands = file_get_contents(Client::COMMAND_FILE);         
             unlink(Client::COMMAND_FILE);
-            foreach( explode(',', $commands) as $command){               
-                $this->addToQueue('termostat_command', $command, true);                    
-            }              
+            if(!empty($commands)){
+                foreach( explode(',', $commands) as $command){               
+                    $this->addToQueue('termostat_command', $command, true);                    
+                }       
+            }       
             $this->addToQueue('termostat_status');    
         }
     }    
