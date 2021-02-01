@@ -18,7 +18,7 @@ mapping = {
     "A4:C1:38:C7:07:6F": "livingroom",
     "A4:C1:38:BC:6B:C8": "office"
 }
-expireAt = calendar.timegm(time.gmtime()) + 60
+expireAt = calendar.timegm(time.gmtime()) + 180
 
 try:
     client = paho.Client()
