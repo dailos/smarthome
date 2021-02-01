@@ -4,7 +4,6 @@ namespace Smarthome;
 class Core
 {  
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
-    const TERMOSTAT_REFRESH = 30;
     const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";  
     
     private $mqtt;    
@@ -48,7 +47,8 @@ class Core
                 break;
             case 'termostat_status':
                 exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
-                $status = implode(' ', $status);                      
+                $status = implode(' ', $status);         
+                echo $status . "\n";             
                 $this->mqtt->publish("erik/termostat/status", $status);
                 break;
             case 'termometer_status':
