@@ -21,7 +21,8 @@ class Core
             $this->readCommands();                
             if(count($this->actionQueue)){ 
                 $this->execAction(array_shift($this->actionQueue));             
-            }else{                             
+            }else{                       
+                $this->addToQueue('termostat_status');        
                 $this->addToQueue('termometer_status');  
             }           
         }
