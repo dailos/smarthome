@@ -4,7 +4,7 @@ namespace Smarthome;
 class Core
 {  
     const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
-    const TERMOSTAT_REFRESH = 300;
+    const TERMOSTAT_REFRESH = 60;
     const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";  
     
 
@@ -69,7 +69,7 @@ class Core
                     $this->addToQueue('termostat_command', $command, true);                    
                 }       
             }       
-            $this->addToQueue('termostat_status');    
+            //$this->addToQueue('termostat_status');    
         }
     }    
 
