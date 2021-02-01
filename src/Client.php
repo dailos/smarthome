@@ -17,6 +17,7 @@ class Client
 
     public function subscribe()
     {
+        $this->connect();
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
             file_put_contents(self::COMMAND_FILE, $command . ",", FILE_APPEND);                                         
         }, 0);          
@@ -25,13 +26,17 @@ class Client
     }
 
     public function publish($topic, $message)
+    {                  
+        $this->connect();    
+        $this->mqtt->publish($topic, $message);
+        $this->mqtt->close();
+    }
+    private function connect()
     {
         try{
             $this->mqtt->connect();
         }catch(ConnectingToBrokerFailedException $e){            
             die("connection to " . self::SERVER ." failed\n");
-        }                           
-        $this->mqtt->publish($topic, $message);
-        $this->mqtt->close();
+        }            
     }
 }
