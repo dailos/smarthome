@@ -24,8 +24,14 @@ class Client
         $this->mqtt->close();
     }
 
-    public function getMqtt()
+    public function publish($topic, $message)
     {
-        return $this->mqtt;
+        try{
+            $this->mqtt->connect();
+        }catch(ConnectingToBrokerFailedException $e){            
+            die("connection to " . self::SERVER ." failed\n");
+        }                           
+        $this->mqtt->publish($topic, $status);
+        $this->mqtt->close();
     }
 }
