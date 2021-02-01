@@ -43,6 +43,7 @@ class Core
 
     private function execAction($action)
     {                      
+        print_r($action);
         switch ($action['type']) 
         {
             case 'termostat_command':
