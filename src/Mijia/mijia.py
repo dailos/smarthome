@@ -20,7 +20,7 @@ mapping = {
 }
 
 try:
-    client = paho.Client("client")
+    client = paho.Client()
     client.connect(broker, port)
 except:
     print("Cannot initialize mqtt client")
