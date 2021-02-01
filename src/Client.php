@@ -12,12 +12,7 @@ class Client
 
     public function __construct()
     {
-        $this->mqtt =  new MQTTClient(self::SERVER);
-        try{
-            $this->mqtt->connect();
-        }catch(ConnectingToBrokerFailedException $e){            
-            die("connection to " . self::SERVER ." failed\n");
-        }                                            
+        $this->mqtt =  new MQTTClient(self::SERVER);            
     }        
 
     public function subscribe()
