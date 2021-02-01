@@ -31,7 +31,7 @@ class Client
         }catch(ConnectingToBrokerFailedException $e){            
             die("connection to " . self::SERVER ." failed\n");
         }                           
-        $this->mqtt->publish($topic, $status);
+        $this->mqtt->publish($topic, $message);
         $this->mqtt->close();
     }
 }
