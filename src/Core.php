@@ -63,7 +63,7 @@ class Core
             $commands = file_get_contents(Client::COMMAND_FILE);         
             unlink(Client::COMMAND_FILE);            
                 foreach( explode(',', $commands) as $command){               
-                    if(!empty($commands)){
+                    if(!empty($command)){
                         $this->addToQueue('termostat_command', $command, true);                    
                      }       
                 }                       
