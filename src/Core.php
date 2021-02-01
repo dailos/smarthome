@@ -78,7 +78,7 @@ class Core
     {
         if($this->lastTermostatRefresh + self::TERMOSTAT_REFRESH < time() && !file_exists(Client::COMMAND_FILE)){
             $this->lastTermostatRefresh = time();
-            fopen(Client::COMMAND_FILE, "w");
+            exec("touch ".Client::COMMAND_FILE);
         }    
     }
 }
