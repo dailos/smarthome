@@ -19,6 +19,8 @@ mapping = {
     "A4:C1:38:BC:6B:C8": "office"
 }
 
+time.sleep(10)
+
 try:
     client = paho.Client()
     client.connect(broker, port)
