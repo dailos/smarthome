@@ -1,7 +1,7 @@
 <?php
 namespace Smarthome\EQ3;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 $client = new Client();
 
