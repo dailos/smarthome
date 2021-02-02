@@ -10,7 +10,7 @@ from bluetooth_utils import (toggle_device, enable_le_scan,
                              parse_le_advertising_events,
                              disable_le_scan, raw_packet_to_str)
 
-actionsFile = "/home/pi/smarthome/src/actions.txt"
+actionsFile = "/home/pi/smarthome/src/actions.csv"
 broker = "volumio.local"
 port = 1883
 mapping = {
