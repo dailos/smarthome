@@ -3,11 +3,9 @@ namespace Smarthome;
 
 class Core
 {  
-    const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";    
-    const TERMOMETER_SCRIPT = "sudo python ". __DIR__ . "/Mijia/mijia.py";  
+    const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";        
     
     private $mqttClient;    
-    private $actionQueue = [];
 
     public function __construct(Client $client)
     {
@@ -17,51 +15,25 @@ class Core
     public function __invoke()
     {
         while (true){                         
-            $this->readActions();                            
-            $this->execAction();                          
-        }
-    }
-
-    private function addToQueue($action = null, $highPrio = false)
-    {       
-        if($highPrio){            
-            array_unshift($this->actionQueue, $action);
-        }else{
-            $this->actionQueue[] = $action;
-        }        
-    }
-
-    private function execAction()
-    {                           
-        $action = array_shift($this->actionQueue);   
-        if(!$action){
-            return shell_exec(self::TERMOMETER_SCRIPT);            
-        }
-              
-        if ($action === 'refresh'){
-            exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
-            $status = implode(' ', $status);                         
-            return $this->mqttClient->publish("erik/termostat/status", $status); 
-        }
-
-        return shell_exec(self::TERMOSTAT_SCRIPT . $action);        
-    }
-
-    private function readActions()
-    {        
-        if(file_exists(Client::ACTION_FILE)){
+            if(!file_exists(Client::ACTION_FILE)){
+                sleep(1);
+                return;
+            }
             $actionsStr = file_get_contents(Client::ACTION_FILE);         
-            unlink(Client::ACTION_FILE);    
-            $actions = explode(',', $actionsStr);           
-            foreach(array_reverse($actions) as $action){               
-                if(!empty($action)){
-                    $this->addToQueue($action, true);                    
+            unlink(Client::ACTION_FILE);             
+            foreach(explode(',', $actionsStr) as $action){               
+                if(!empty($action) && $action !== 'refresh'){
+                    shell_exec(self::TERMOSTAT_SCRIPT . $action);                     
                 }       
             }            
-            if(!in_array('refresh', $actions)){
-                $this->addToQueue('refresh');   
-            }               
-            
+            $this->sendStatusUpdate();                                                                  
         }
-    }    
+    }
+
+    private function sendStatusUpdate()
+    {
+        exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
+        $status = implode(' ', $status);                         
+        return $this->mqttClient->publish("erik/termostat/status", $status); 
+    }
 }
