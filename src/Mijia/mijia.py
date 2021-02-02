@@ -39,6 +39,7 @@ enable_le_scan(sock, filter_duplicates=True)
 
 
 def actionReceived(client, userdata, message):
+    print("Killing process")
     disable_le_scan(sock)
     sys.exit()
 
