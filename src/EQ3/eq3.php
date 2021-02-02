@@ -1,5 +1,5 @@
 <?php
-namespace Smarthome;
+namespace Smarthome\EQ3;
 
 require __DIR__ . '/../vendor/autoload.php';
 

@@ -10,6 +10,7 @@ from bluetooth_utils import (toggle_device, enable_le_scan,
                              parse_le_advertising_events,
                              disable_le_scan, raw_packet_to_str)
 
+actionsFile = "/home/pi/smarthome/src/EQ3/actions.csv"
 broker = "volumio.local"
 port = 1883
 mapping = {
@@ -37,6 +38,10 @@ enable_le_scan(sock, filter_duplicates=True)
 
 
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
+    if os.path.isfile(actionsFile):
+        disable_le_scan(sock)
+        sys.exit()
+
     data_str = raw_packet_to_str(data)
 
     if mapping.has_key(mac):

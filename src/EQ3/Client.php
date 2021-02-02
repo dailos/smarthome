@@ -1,5 +1,5 @@
 <?php
-namespace Smarthome;
+namespace Smarthome\EQ3;
 
 use PhpMqtt\Client\MQTTClient;
 use PhpMqtt\Client\Exceptions\ConnectingToBrokerFailedException;

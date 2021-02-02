@@ -1,9 +1,9 @@
 <?php
-namespace Smarthome;
+namespace Smarthome\EQ3;
 
 class Core
 {  
-    const TERMOSTAT_SCRIPT = __DIR__ . "/EQ3/script.exp 00:1A:22:12:DF:0E ";        
+    const SCRIPT = __DIR__ . "/script.exp 00:1A:22:12:DF:0E ";        
     
     private $mqttClient;    
 
@@ -23,7 +23,7 @@ class Core
             unlink(Client::ACTION_FILE);             
             foreach(explode(',', $actionsStr) as $action){               
                 if(!empty($action) && $action !== 'refresh'){
-                    shell_exec(self::TERMOSTAT_SCRIPT . $action);                     
+                    shell_exec(self::SCRIPT . $action);                     
                 }       
             }            
             $this->sendStatusUpdate();                                                                  
@@ -32,7 +32,7 @@ class Core
 
     private function sendStatusUpdate()
     {
-        exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
+        exec(self::SCRIPT . "devjson", $status);
         $status = implode(' ', $status);                         
         return $this->mqttClient->publish("erik/termostat/status", $status); 
     }
