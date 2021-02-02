@@ -17,7 +17,7 @@ class Core
     public function __invoke()
     {
         while (true){                         
-            $this->readCommands();                            
+            $this->readActions();                            
             $this->execAction();                          
         }
     }
