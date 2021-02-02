@@ -38,7 +38,7 @@ class Core
             return shell_exec(self::TERMOMETER_SCRIPT);            
         }
               
-        if ($action === 'status'){
+        if ($action === 'refresh'){
             exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
             $status = implode(' ', $status);                         
             $this->mqttClient->publish("erik/termostat/status", $status); 
@@ -58,8 +58,8 @@ class Core
                     $this->addToQueue($action, true);                    
                 }       
             }            
-            if(!in_array('status', $actions)){
-                $this->addToQueue('status');   
+            if(!in_array('refresh', $actions)){
+                $this->addToQueue('refresh');   
             }               
             
         }

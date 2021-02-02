@@ -18,8 +18,8 @@ class Client
     public function subscribe()
     {
         $this->connect();
-        $this->mqtt->subscribe("erik/termostat/#",function ($topic, $action)  {  
-            $this->addAction($action);                        
+        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $action)  {  
+            file_put_contents(self::ACTION_FILE, $action . ",", FILE_APPEND);                  
         }, 0);                 
         $this->mqtt->loop(true); 
         $this->mqtt->close();
@@ -30,12 +30,7 @@ class Client
         $this->connect();    
         $this->mqtt->publish($topic, $message);
         $this->mqtt->close();
-    }
-
-    private function addAction($action)
-    {
-        file_put_contents(self::ACTION_FILE, $action . ",", FILE_APPEND);
-    }
+    }    
 
     private function connect()
     {
