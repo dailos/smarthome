@@ -5,6 +5,7 @@ import calendar
 import os.path
 import bluetooth._bluetooth as bluez
 import paho.mqtt.client as paho
+import paho.mqtt.subscribe as subscribe
 
 from bluetooth_utils import (toggle_device, enable_le_scan,
                              parse_le_advertising_events,
@@ -37,12 +38,16 @@ except:
 enable_le_scan(sock, filter_duplicates=True)
 
 
+def actionReceived(client, userdata, message):
+    disable_le_scan(sock)
+    sys.exit()
+
+
+subscribe.callback(actionReceived, "erik/termostat/set", hostname=broker)
+
+
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
-
-    if os.path.isfile(actionsFile):
-        disable_le_scan(sock)
-        sys.exit()
 
     if mapping.has_key(mac):
         temp = float(int(data_str[22:26], 16)) / 10.0
