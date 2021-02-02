@@ -16,17 +16,17 @@ class Core
     {
         while (true){                         
             if(!file_exists(Client::ACTION_FILE)){
-                sleep(1);
-                return;
-            }
-            $actionsStr = file_get_contents(Client::ACTION_FILE);         
-            unlink(Client::ACTION_FILE);             
-            foreach(explode(',', $actionsStr) as $action){               
-                if(!empty($action) && $action !== 'refresh'){
-                    shell_exec(self::SCRIPT . $action);                     
-                }       
-            }            
-            $this->sendStatusUpdate();                                                                  
+                sleep(1);                
+            }else{
+                $actionsStr = file_get_contents(Client::ACTION_FILE);         
+                unlink(Client::ACTION_FILE);             
+                foreach(explode(',', $actionsStr) as $action){               
+                    if(!empty($action) && $action !== 'refresh'){
+                        shell_exec(self::SCRIPT . $action);                     
+                    }       
+                }            
+                $this->sendStatusUpdate();         
+            }                                                         
         }
     }
 
