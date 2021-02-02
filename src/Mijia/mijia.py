@@ -18,7 +18,6 @@ mapping = {
     "A4:C1:38:C7:07:6F": "livingroom",
     "A4:C1:38:BC:6B:C8": "office"
 }
-expireAt = calendar.timegm(time.gmtime()) + 180
 
 try:
     client = paho.Client()
@@ -41,7 +40,7 @@ enable_le_scan(sock, filter_duplicates=True)
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
     data_str = raw_packet_to_str(data)
 
-    if os.path.isfile(commandFile) or (calendar.timegm(time.gmtime()) > expireAt):
+    if os.path.isfile(commandFile):
         disable_le_scan(sock)
         sys.exit()
 

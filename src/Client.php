@@ -20,6 +20,9 @@ class Client
         $this->connect();
         $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
             file_put_contents(self::COMMAND_FILE, $command . ",", FILE_APPEND);                                         
+        }, 0);        
+        $this->mqtt->subscribe("erik/termostat/request",function ($topic, $command)  {  
+            file_put_contents(self::COMMAND_FILE, ",", FILE_APPEND);                                         
         }, 0);          
         $this->mqtt->loop(true); 
         $this->mqtt->close();
