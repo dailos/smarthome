@@ -7,7 +7,7 @@ use PhpMqtt\Client\Exceptions\ConnectingToBrokerFailedException;
 class Client
 {
     const SERVER = "volumio.local";
-    const COMMAND_FILE = __DIR__ . "/commands.txt";
+    const ACTION_FILE = __DIR__ . "/actions.csv";
     private $mqtt;
 
     public function __construct()
@@ -18,12 +18,9 @@ class Client
     public function subscribe()
     {
         $this->connect();
-        $this->mqtt->subscribe("erik/termostat/set",function ($topic, $command)  {  
-            file_put_contents(self::COMMAND_FILE, $command . ",", FILE_APPEND);                                         
-        }, 0);        
-        $this->mqtt->subscribe("erik/termostat/request",function ($topic, $command)  {  
-            file_put_contents(self::COMMAND_FILE, ",", FILE_APPEND);                                         
-        }, 0);          
+        $this->mqtt->subscribe("erik/termostat/#",function ($topic, $action)  {  
+            $this->addAction($action);                        
+        }, 0);                 
         $this->mqtt->loop(true); 
         $this->mqtt->close();
     }
@@ -34,6 +31,12 @@ class Client
         $this->mqtt->publish($topic, $message);
         $this->mqtt->close();
     }
+
+    private function addAction($action)
+    {
+        file_put_contents(self::ACTION_FILE, $action . ",", FILE_APPEND);
+    }
+
     private function connect()
     {
         try{

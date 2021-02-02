@@ -16,20 +16,14 @@ class Core
    
     public function __invoke()
     {
-        while (true)
-        {                         
-            $this->readCommands();                
-            if(count($this->actionQueue)){ 
-                $this->execAction(array_shift($this->actionQueue));             
-            }else{                                          
-                $this->addToQueue('termometer_status');  
-            }           
+        while (true){                         
+            $this->readCommands();                            
+            $this->execAction();                          
         }
     }
 
-    private function addToQueue($type, $command = null, $highPrio = false)
-    {
-        $action = ['type' => $type, 'command' => $command];
+    private function addToQueue($action = null, $highPrio = false)
+    {       
         if($highPrio){            
             array_unshift($this->actionQueue, $action);
         }else{
@@ -37,35 +31,37 @@ class Core
         }        
     }
 
-    private function execAction($action)
-    {                              
-        switch ($action['type']) 
-        {
-            case 'termostat_command':
-                shell_exec(self::TERMOSTAT_SCRIPT . $action['command']);
-                break;
-            case 'termostat_status':
-                exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
-                $status = implode(' ', $status);                         
-                $this->mqttClient->publish("erik/termostat/status", $status);                
-                break;
-            case 'termometer_status':
-                shell_exec(self::TERMOMETER_SCRIPT);
-                break;
+    private function execAction()
+    {                           
+        $action = array_shift($this->actionQueue);   
+        if(!$action){
+            return shell_exec(self::TERMOMETER_SCRIPT);            
         }
+              
+        if ($action === 'status'){
+            exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
+            $status = implode(' ', $status);                         
+            $this->mqttClient->publish("erik/termostat/status", $status); 
+        }
+
+        return shell_exec(self::TERMOSTAT_SCRIPT . $action);        
     }
 
-    private function readCommands()
+    private function readActions()
     {        
-        if(file_exists(Client::COMMAND_FILE)){
-            $commands = file_get_contents(Client::COMMAND_FILE);         
-            unlink(Client::COMMAND_FILE);            
-                foreach( explode(',', $commands) as $command){               
-                    if(!empty($command)){
-                        $this->addToQueue('termostat_command', $command, true);                    
-                     }       
-                }                       
-            $this->addToQueue('termostat_status');  
+        if(file_exists(Client::ACTION_FILE)){
+            $actionsStr = file_get_contents(Client::ACTION_FILE);         
+            unlink(Client::ACTION_FILE);    
+            $actions = explode(',', $actionsStr);           
+            foreach(array_reverse($actions) as $action){               
+                if(!empty($action)){
+                    $this->addToQueue($action, true);                    
+                }       
+            }            
+            if(!in_array('status', $actions)){
+                $this->addToQueue('status');   
+            }               
+            
         }
     }    
 }
