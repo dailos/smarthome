@@ -41,7 +41,7 @@ class Core
         if ($action === 'refresh'){
             exec(self::TERMOSTAT_SCRIPT . "devjson", $status);
             $status = implode(' ', $status);                         
-            $this->mqttClient->publish("erik/termostat/status", $status); 
+            return $this->mqttClient->publish("erik/termostat/status", $status); 
         }
 
         return shell_exec(self::TERMOSTAT_SCRIPT . $action);        
