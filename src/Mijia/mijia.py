@@ -19,7 +19,7 @@ mapping = {
     "A4:C1:38:BC:6B:C8": "office"
 }
 
-time.sleep(10)
+time.sleep(40)
 
 try:
     client = paho.Client()
