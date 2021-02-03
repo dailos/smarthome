@@ -18,6 +18,11 @@ mapping = {
     "A4:C1:38:C7:07:6F": "livingroom",
     "A4:C1:38:BC:6B:C8": "office"
 }
+values = {
+    "A4:C1:38:44:E9:EB": "",
+    "A4:C1:38:C7:07:6F": "",
+    "A4:C1:38:BC:6B:C8": ""
+}
 
 time.sleep(40)
 
@@ -50,11 +55,14 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
         temp = float(int(data_str[22:26], 16)) / 10.0
         hum = int(data_str[26:28], 16)
         batt = int(data_str[28:30], 16)
-        msg = '{"temperature": ' + \
+        value = '{"temperature": ' + \
             str(temp) + ',"humidity":' + str(hum) + \
             ',"battery": ' + str(batt) + '}'
-        topic = mapping[mac] + "/termometer/status"
-        client.publish(topic, msg)
+        if (values[mac] != value){
+            values[mac] = value
+            topic = mapping[mac] + "/termometer/status"
+            client.publish(topic, value)
+        }
 
 
 try:
