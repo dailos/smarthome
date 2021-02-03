@@ -14,9 +14,9 @@ class Core
    
     public function __invoke()
     {
-        while (true){                         
-            sleep(1); 
-            if(file_exists(Client::ACTION_FILE)){                                           
+        while (true){                                      
+            if(file_exists(Client::ACTION_FILE)){
+                sleep(1);                                           
                 $actionsStr = file_get_contents(Client::ACTION_FILE);         
                 unlink(Client::ACTION_FILE);             
                 foreach(explode(',', $actionsStr) as $action){               
@@ -25,7 +25,8 @@ class Core
                     }       
                 }            
                 $this->sendStatusUpdate();         
-            }                                                         
+            }            
+            sleep(1);                                             
         }
     }
 
