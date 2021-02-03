@@ -58,11 +58,10 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
         value = '{"temperature": ' + \
             str(temp) + ',"humidity":' + str(hum) + \
             ',"battery": ' + str(batt) + '}'
-        if (values[mac] != value){
+        if (values[mac] != value):
             values[mac] = value
             topic = mapping[mac] + "/termometer/status"
-            client.publish(topic, value)
-        }
+            client.publish(topic, value)        
 
 
 try:
