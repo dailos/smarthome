@@ -15,9 +15,8 @@ class Core
     public function __invoke()
     {
         while (true){                         
-            if(!file_exists(Client::ACTION_FILE)){
-                sleep(1);                
-            }else{
+            sleep(1); 
+            if(file_exists(Client::ACTION_FILE)){                                           
                 $actionsStr = file_get_contents(Client::ACTION_FILE);         
                 unlink(Client::ACTION_FILE);             
                 foreach(explode(',', $actionsStr) as $action){               
