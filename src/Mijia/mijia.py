@@ -26,6 +26,8 @@ values = {
 
 time.sleep(40)
 
+shouldIfFileExists()
+
 try:
     client = paho.Client()
     client.connect(broker, port)
@@ -45,10 +47,7 @@ enable_le_scan(sock, filter_duplicates=True)
 
 
 def le_advertise_packet_handler(mac, adv_type, data, rssi):
-    if os.path.isfile(actionsFile):
-        disable_le_scan(sock)
-        sys.exit()
-
+    shouldIfFileExists()
     data_str = raw_packet_to_str(data)
 
     if mapping.has_key(mac):
@@ -61,8 +60,12 @@ def le_advertise_packet_handler(mac, adv_type, data, rssi):
         if (values[mac] != value):
             values[mac] = value
             topic = mapping[mac] + "/termometer/status"
-            client.publish(topic, value)        
+            client.publish(topic, value)       
 
+def shouldIfFileExists():
+    if os.path.isfile(actionsFile): 
+        disable_le_scan(sock)
+        sys.exit()
 
 try:
     parse_le_advertising_events(sock,
