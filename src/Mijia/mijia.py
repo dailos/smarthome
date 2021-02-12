@@ -24,6 +24,30 @@ values = {
     "A4:C1:38:BC:6B:C8": ""
 }
 
+
+def shouldIfFileExists():
+    if os.path.isfile(actionsFile):
+        disable_le_scan(sock)
+        sys.exit()
+
+
+def le_advertise_packet_handler(mac, adv_type, data, rssi):
+    shouldIfFileExists()
+    data_str = raw_packet_to_str(data)
+
+    if mapping.has_key(mac):
+        temp = float(int(data_str[22:26], 16)) / 10.0
+        hum = int(data_str[26:28], 16)
+        batt = int(data_str[28:30], 16)
+        value = '{"temperature": ' + \
+            str(temp) + ',"humidity":' + str(hum) + \
+            ',"battery": ' + str(batt) + '}'
+        if (values[mac] != value):
+            values[mac] = value
+            topic = mapping[mac] + "/termometer/status"
+            client.publish(topic, value)
+
+
 time.sleep(40)
 
 shouldIfFileExists()
@@ -44,28 +68,6 @@ except:
     raise
 
 enable_le_scan(sock, filter_duplicates=True)
-
-
-def le_advertise_packet_handler(mac, adv_type, data, rssi):
-    shouldIfFileExists()
-    data_str = raw_packet_to_str(data)
-
-    if mapping.has_key(mac):
-        temp = float(int(data_str[22:26], 16)) / 10.0
-        hum = int(data_str[26:28], 16)
-        batt = int(data_str[28:30], 16)
-        value = '{"temperature": ' + \
-            str(temp) + ',"humidity":' + str(hum) + \
-            ',"battery": ' + str(batt) + '}'
-        if (values[mac] != value):
-            values[mac] = value
-            topic = mapping[mac] + "/termometer/status"
-            client.publish(topic, value)       
-
-def shouldIfFileExists():
-    if os.path.isfile(actionsFile): 
-        disable_le_scan(sock)
-        sys.exit()
 
 try:
     parse_le_advertising_events(sock,
