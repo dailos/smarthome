@@ -16,16 +16,17 @@ class Core
     {
         while (true){                                      
             if(file_exists(Client::ACTION_FILE)){
-                sleep(1);                                           
-                $actionsStr = file_get_contents(Client::ACTION_FILE);                                  
-                foreach(explode(',', $actionsStr) as $action){               
-                    if(!empty($action) && $action !== 'refresh'){
-                        shell_exec(self::SCRIPT . $action);                     
-                    }       
-                }            
-                $this->sendStatusUpdate();         
+                $actionsStr = file_get_contents(Client::ACTION_FILE);                                                  
+                foreach(explode(',', $actionsStr) as $action){                                   
+                    if($action === 'refresh'){
+                        $this->sendStatusUpdate(); 
+                    }else{
+                        $this->setStatus($action);
+                    }                                               
+                }                                    
                 unlink(Client::ACTION_FILE);                                             
             }                                   
+            sleep(1);
         }
     }
 
@@ -34,5 +35,20 @@ class Core
         exec(self::SCRIPT . "devjson", $status);
         $status = implode(' ', $status);                         
         return $this->mqttClient->publish("erik/termostat/status", $status); 
+    }
+
+    private function setStatus($action)
+    {
+        if(!empty($action)){
+            exec(self::SCRIPT . $action, $status);      
+            $lines = explode("\n", $status);
+            foreach ($lines as $line){
+                $words = explode(":", $line);
+                if($words[0] === 'Temperature' && isset($words[1])){
+                    $result = '{"temperature" : '. substr(trim($words[1]), 0, -3) . ' }';
+                    return $this->mqttClient->publish("erik/termostat/status", $result); 
+                }
+            }                           
+        } 
     }
 }
