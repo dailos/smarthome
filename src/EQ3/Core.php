@@ -40,10 +40,9 @@ class Core
     private function setStatus($action)
     {
         if(!empty($action)){
-            exec(self::SCRIPT . $action, $status);      
-            $lines = explode("\n", $status);
-            foreach ($lines as $line){
-                $words = explode(":", $line);
+            exec(self::SCRIPT . $action, $status);      	    
+            foreach ($status as $line){
+		$words = explode(":", $line);
                 if($words[0] === 'Temperature' && isset($words[1])){
                     $result = '{"temperature" : '. substr(trim($words[1]), 0, -3) . ' }';
                     return $this->mqttClient->publish("erik/termostat/status", $result); 
