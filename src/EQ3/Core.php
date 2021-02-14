@@ -3,7 +3,8 @@ namespace Smarthome\EQ3;
 
 class Core
 {  
-    const SCRIPT = __DIR__ . "/script.exp 00:1A:22:12:DF:0E ";        
+    const SCRIPT = __DIR__ . "/script.exp 00:1A:22:12:DF:0E ";     
+    const RETRIES = 5;   
     
     private $mqttClient;    
 
@@ -40,12 +41,14 @@ class Core
     private function setStatus($action)
     {
         if(!empty($action)){
-            exec(self::SCRIPT . $action, $status);      	    
-            foreach ($status as $line){
-		$words = explode(":", $line);
-                if($words[0] === 'Temperature' && isset($words[1])){
-                    $result = '{"temperature" : '. substr(trim($words[1]), 0, -3) . ' }';
-                    return $this->mqttClient->publish("erik/termostat/status", $result); 
+            for($i = 0; $i <= self::RETRIES; $i++){
+                exec(self::SCRIPT . $action, $status);      	    
+                foreach ($status as $line){
+		            $words = explode(":", $line);
+                    if($words[0] === 'Temperature' && isset($words[1])){
+                        $result = '{"temperature" : '. substr(trim($words[1]), 0, -3) . ' }';
+                        return $this->mqttClient->publish("erik/termostat/status", $result); 
+                    }                    
                 }
             }                           
         } 
